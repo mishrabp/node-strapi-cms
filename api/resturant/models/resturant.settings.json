@@ -1,0 +1,49 @@
+{
+  "kind": "collectionType",
+  "collectionName": "resturants",
+  "info": {
+    "name": "resturant",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "unique": true,
+      "required": true,
+      "maxLength": 15
+    },
+    "Logo": {
+      "model": "file",
+      "via": "related",
+      "allowedTypes": [
+        "images"
+      ],
+      "plugin": "upload",
+      "required": false,
+      "pluginOptions": {}
+    },
+    "Location": {
+      "type": "string",
+      "maxLength": 250
+    },
+    "Phone": {
+      "type": "string",
+      "default": "(999) 999 9999",
+      "maxLength": 15
+    },
+    "categories": {
+      "via": "resturants",
+      "collection": "category"
+    },
+    "Website": {
+      "type": "string",
+      "maxLength": 100
+    }
+  }
+}

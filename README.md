@@ -1,2 +1,3 @@
-# node-strapi-cms
-It is demo content management system built on STRAPI + NodeJS
+# Strapi application
+
+A quick description of your strapi application
