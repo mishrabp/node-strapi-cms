@@ -10,21 +10,24 @@ parameters:
 
 jobs:
 - deployment: DeployAppService
+  displayName: 'Deploy to App Service'
   environment: ${{ parameters.environment }}
+  workspace:
+    clean: all
   strategy: 
     runOnce:
       deploy:
         steps:
-#        - task: DownloadPipelineArtifact@2
-#          inputs:
-#            buildType: 'current'
-#            downloadType: 'single'
-#            artifactName: ${{ parameters.artifactName }}
-#            targetPath: '$(System.DefaultWorkingDirectory)'
+        - task: DownloadPipelineArtifact@2
+          inputs:
+            buildType: 'current'
+            downloadType: 'single'
+            artifactName: ${{ parameters.artifactName }}
+            targetPath: '$(System.DefaultWorkingDirectory)'
         - task: AzureRmWebAppDeployment@4
           inputs:
             ConnectionType: 'AzureRM'
             azureSubscription: ${{ parameters.subscription }}
             appType: 'webApp'
             WebAppName: ${{ parameters.webAppName }}
-            packageForLinux: '$(System.DefaultWorkingDirectory)/drop/**/*.zip'
+            packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
