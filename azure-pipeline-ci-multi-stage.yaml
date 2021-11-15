@@ -73,7 +73,7 @@ stages:
       terraformcontainer: $(terraformContainer)
 
 - stage: Development
-  displayName: 'Deploy Code to QA Web App Service'
+  displayName: 'Deploy Code to Devlopment Web App Service'
   pool:
     name: "MyBuildAgents"
     vmImage: ubuntu-latest
