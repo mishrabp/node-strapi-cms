@@ -60,9 +60,9 @@ resource "azurerm_app_service_plan" "my" {
 
 }
 
-#Creating an App Service for QA
-resource "azurerm_app_service" "qa" {
-    name = "${var.app_service_name_prefix}-qa"
+#Creating an App Service for Development
+resource "azurerm_app_service" "dev" {
+    name = "${var.app_service_name_prefix}-dev"
     location = azurerm_resource_group.my.location
     resource_group_name = azurerm_resource_group.my.name
     app_service_plan_id = azurerm_app_service_plan.my.id 
@@ -73,14 +73,14 @@ resource "azurerm_app_service" "qa" {
     }
     
     app_settings = {
-        "MYNWAPP_ENV" = "development"
-        "MYNWAPP_PORT" = "8091"
-        "MYNWAPP_AuthTokenKey" = "authtoken1"
-        "MYNWAPP_SessionKey" = "sessionkey1"
-        "MYNWAPP_GEOCODER_API_KEY" = "AIzaSyAFN7pm1QA20ojk8CA2tQnXzOHB1ryRGtM"
-        "MYNWAPP_ERRORLOG" = "true"
-        "MYNWAPP_TRACKINGLOG" = "true"
-        "MYNWAPP_MONGO_URI" ="mongodb://mongoadmin:passw0rd!@devopsmasterlinuxvm.centralus.cloudapp.azure.com:27017/northwind?authSource=admin&readPreference=primary&appname=MongoDB%20Compass&ssl=false"
+        "DATABASE_HOST" = "devopsmasterlinuxvm.centralus.cloudapp.azure.com"
+        "DATABASE_SRV" = "false"
+        "DATABASE_PORT" = "9003"
+        "DATABASE_NAME" = "strapicms"
+        "DATABASE_USERNAME" = "mongoadmin"
+        "DATABASE_PASSWORD" = "passw0rd!"
+        "AUTHENTICATION_DATABASE" = ""
+        "DATABASE_SSL" ="false"
     }
 
     connection_string {
