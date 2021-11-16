@@ -28,6 +28,6 @@ jobs:
           inputs:
             ConnectionType: 'AzureRM'
             azureSubscription: ${{ parameters.subscription }}
-            appType: 'webApp'
+            WebAppKind: 'webApp'
             WebAppName: ${{ parameters.webAppName }}
-            packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+            Package: '$(System.DefaultWorkingDirectory)/**/*.zip'
