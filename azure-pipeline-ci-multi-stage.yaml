@@ -21,6 +21,20 @@ stages:
 - stage: Build
   displayName: "Compile Code"
   jobs:
+  - job: DownloadTerraformFiles
+    displayName: 'Download Terraform Files' 
+    steps:
+    - task: CopyFiles@2
+      displayName: 'Copy terrraform files to terraform folder'
+      inputs:
+        SourceFolder: terraform
+        TargetFolder: '$(build.artifactstagingdirectory)/terraform'
+    - task: PublishPipelineArtifact@1
+      displayName: 'Publish Artifacts & Binaries to the drop folder'
+      inputs:
+        targetPath: '$(build.artifactstagingdirectory)'
+        artifact: 'drop'
+        publishLocation: 'pipeline'
   - job: Compile
     displayName: 'Compile NPM Code' 
     steps:
@@ -40,11 +54,6 @@ stages:
         cleanTargetFolder: true  
         sourceFolder: '$(System.DefaultWorkingDirectory)'
         targetFolder: '$(build.artifactstagingdirectory)/www'
-    - task: CopyFiles@2
-      displayName: 'Copy terrraform files to terraform folder'
-      inputs:
-        SourceFolder: terraform
-        TargetFolder: '$(build.artifactstagingdirectory)/terraform'
     - task: ArchiveFiles@2
       displayName: 'Create a deployable zip file from the www folder'
       inputs:
@@ -70,8 +79,6 @@ stages:
     name: "MyBuildAgents"
     vmImage: ubuntu-latest
     demand: node.js
-  dependsOn: 
-  - Build
   jobs:
   - template: azure-setup-appservice.yaml
     parameters:
@@ -88,6 +95,7 @@ stages:
     demand: node.js
   dependsOn: 
   - Infrastructure
+  - Build
   variables: 
     Environment: Development
   jobs:
