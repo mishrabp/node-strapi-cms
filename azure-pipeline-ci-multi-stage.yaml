@@ -33,12 +33,6 @@ stages:
       inputs:
         SourceFolder: terraform
         TargetFolder: '$(build.artifactstagingdirectory)/terraform'
-    - task: PublishPipelineArtifact@1
-      displayName: 'Publish Artifacts & Binaries to the drop folder'
-      inputs:
-        targetPath: '$(build.artifactstagingdirectory)'
-        artifact: 'drop'
-        publishLocation: 'pipeline'
     #Build the NodeJS code which will be deployed to Dev "Azure App Service"
     - script: |
         npm install
