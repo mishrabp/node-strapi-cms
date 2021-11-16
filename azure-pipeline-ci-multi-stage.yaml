@@ -50,6 +50,7 @@ stages:
       inputs:
         rootFolderOrFile: '$(build.artifactstagingdirectory)/www'
         archiveType: 'zip' 
+        archiveFile: '$(Build.ArtifactStagingDirectory)/strapicms.zip'
         includeRootFolder: false        
         replaceExistingArchive: true
     - task: DeleteFiles@1
