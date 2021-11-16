@@ -36,7 +36,8 @@ jobs:
     continueOnError: true
 
 - job: Terraform
-  displayName: 'Create resources in Azure'
+  displayName: 'Create resources in Azure using Terraform'
+  dependsOn: TerraformStorage
   steps:
   - task: DownloadPipelineArtifact@2
     displayName: 'Download Artifacts'

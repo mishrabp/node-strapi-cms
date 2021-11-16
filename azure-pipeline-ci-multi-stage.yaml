@@ -49,7 +49,14 @@ stages:
       displayName: 'Create a deployable zip file from the www folder'
       inputs:
         rootFolderOrFile: '$(build.artifactstagingdirectory)/www'
+        archiveType: 'zip' 
         includeRootFolder: false        
+        replaceExistingArchive: true
+    - task: DeleteFiles@1
+      displayName: 'Delete www folder'
+      inputs:
+        SourceFolder: '$(build.artifactstagingdirectory)'
+        Contents: 'www' 
     - task: PublishPipelineArtifact@1
       displayName: 'Publish Artifacts & Binaries to the drop folder'
       inputs:
@@ -63,7 +70,8 @@ stages:
     name: "MyBuildAgents"
     vmImage: ubuntu-latest
     demand: node.js
-  dependsOn: Build
+  dependsOn: 
+  - Build
   jobs:
   - template: azure-setup-appservice.yaml
     parameters:
@@ -78,7 +86,8 @@ stages:
     name: "MyBuildAgents"
     vmImage: ubuntu-latest
     demand: node.js
-  dependsOn: Infrastructure
+  dependsOn: 
+  - Infrastructure
   variables: 
     Environment: Development
   jobs:
