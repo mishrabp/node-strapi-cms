@@ -21,9 +21,13 @@ stages:
 - stage: Build
   displayName: "Compile Code"
   jobs:
-  - job: DownloadTerraformFiles
-    displayName: 'Download Terraform Files' 
+  - job: Compile
+    displayName: 'Compile NPM Code' 
     steps:
+    - task: NodeTool@0
+      inputs:
+        versionSpec: '12.x'
+      displayName: 'Install NodeJS Runtime'
     - task: CopyFiles@2
       displayName: 'Copy terrraform files to terraform folder'
       inputs:
@@ -35,14 +39,7 @@ stages:
         targetPath: '$(build.artifactstagingdirectory)'
         artifact: 'drop'
         publishLocation: 'pipeline'
-  - job: Compile
-    displayName: 'Compile NPM Code' 
-    steps:
-    - task: NodeTool@0
-      inputs:
-        versionSpec: '12.x'
-      displayName: 'Install NodeJS Runtime'
-    #Build the NodeJS code which will be deployed to QA "Azure App Service"
+    #Build the NodeJS code which will be deployed to Dev "Azure App Service"
     - script: |
         npm install
         npm run build
@@ -72,6 +69,7 @@ stages:
         targetPath: '$(build.artifactstagingdirectory)'
         artifact: 'drop'
         publishLocation: 'pipeline'
+
 
 - stage: Infrastructure
   displayName: 'Setup Infrastrucure in Azure'
