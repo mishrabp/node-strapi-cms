@@ -35,6 +35,7 @@ stages:
         TargetFolder: '$(build.artifactstagingdirectory)/terraform'
     #Build the NodeJS code which will be deployed to Dev "Azure App Service"
     - script: |
+        npm install strapi
         npm install
         npm run build
       displayName: 'npm install and build'
