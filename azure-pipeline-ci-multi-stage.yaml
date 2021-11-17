@@ -97,4 +97,5 @@ stages:
       environment: ${{ variables.environment }} 
       webAppName: '$(appServicePrefix)-dev'
       subscription: $(subscription)
+      webAppRG: $(ResourceGroup)
 

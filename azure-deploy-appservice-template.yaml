@@ -28,6 +28,7 @@ jobs:
           inputs:
             ConnectionType: 'AzureRM'
             azureSubscription: ${{ parameters.subscription }}
-            WebAppKind: 'webAppLinux'
+            ResourceGroupName: ${{ parameters.webAppRG }}
+            appType: webAppLinux
             WebAppName: ${{ parameters.webAppName }}
-            Package: '$(System.DefaultWorkingDirectory)/publish/strapicms.zip'
+            packageForLinux: '$(System.DefaultWorkingDirectory)/publish/strapicms.zip'
