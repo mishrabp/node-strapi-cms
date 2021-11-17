@@ -3,8 +3,9 @@
 
 parameters:
 - name: environment # don't pass run-time variables
-- name: webAppName
 - name: subscription
+- name: webAppRG
+- name: webAppName
 - name: artifactName
   default: drop
 

@@ -95,7 +95,7 @@ stages:
   - template: azure-deploy-appservice-template.yaml
     parameters:
       environment: ${{ variables.environment }} 
-      webAppName: '$(appServicePrefix)-dev'
-      subscription: $(subscription)
       webAppRG: $(ResourceGroup)
+      subscription: $(subscription)
+      webAppName: '$(appServicePrefix)-dev'
 
