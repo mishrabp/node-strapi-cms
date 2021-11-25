@@ -53,11 +53,11 @@ variables:
 
 
 stages:
-- stage: Build
-  displayName: "Compile Code"
+- stage: Download
+  displayName: "Download Code from GitHub"
   jobs:
-  - job: Compile
-    displayName: 'Compile NPM Code' 
+  - job: Download
+    displayName: 'Downloading Code....' 
     steps:
     - task: NodeTool@0
       inputs:
@@ -80,7 +80,7 @@ stages:
         publishLocation: 'pipeline'
   
   - job: Dockerize
-    displayName: 'Create a Docker Image & Publish to Azure Container Registry - 113136'
+    displayName: 'Building Docker Image....'
     pool:
       name: "MyBuildAgents"
       demand: node.js
@@ -93,7 +93,7 @@ stages:
         command: login
         containerRegistry: ${{ variables.privateContainerRegistry }}
     - task: Docker@2
-      displayName: 'Push Docker Image to ACR (Private)'
+      displayName: 'Public Docker Image to ACR....'
       inputs:
         command: 'buildAndPush'
         containerRegistry: ${{ variables.privateContainerRegistry }}
@@ -137,13 +137,13 @@ stages:
 #      webAppName: '$(appServicePrefix)-qa'
 
 - stage: Development
-  displayName: 'Deploy Code to Development Kubernetes Cluster'
+  displayName: 'Deploy Image to AKS'
   condition: eq('${{ variables.bDeployToDev }}', true) 
   pool:
     name: "MyBuildAgents"
     demand: node.js
   dependsOn: 
-  - Build
+  - Download
   variables: 
     Environment: Development
   jobs:

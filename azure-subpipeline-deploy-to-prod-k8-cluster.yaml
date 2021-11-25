@@ -13,6 +13,7 @@ parameters:
 jobs:
 - deployment: DeployToK8Cluster
   environment: ${{ parameters.environment }}
+  displayName: 'Deploying to AKS....'
   strategy: 
     runOnce:
       deploy:
