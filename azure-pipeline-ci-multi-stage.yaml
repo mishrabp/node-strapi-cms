@@ -142,7 +142,6 @@ stages:
     name: "MyBuildAgents"
     demand: node.js
   dependsOn: 
-  - Infrastructure
   - Build
   variables: 
     Environment: Development
