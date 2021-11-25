@@ -5,7 +5,7 @@ RUN apt-get update -y && \
     apt-get install curl -y && \
     curl -sL https://deb.nodesource.com/setup_12.x && \
     apt-get install nodejs -y && \
-    apt-get install npm@6.14.6 -y && \
+    apt-get install npm -y && \
 # create folder <app> inside the container image
     mkdir -p /app 
 
