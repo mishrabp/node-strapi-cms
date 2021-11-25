@@ -24,7 +24,7 @@ RUN npm config set registry https://registry.npmjs.org/ && \
     npm run build
 
 # Specify port app runs on
-EXPOSE 8080
+EXPOSE 8081
 
 # Set environment variable default value
 ENV DATABASE_HOST="devopsmasterlinuxvm.centralus.cloudapp.azure.com" \

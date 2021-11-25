@@ -39,7 +39,7 @@ spec:
         - name: DATABASE_SSL
           value: 'false' 
         ports:
-        - containerPort: 8080    
+        - containerPort: 8081    
       imagePullSecrets:
       - name: acr-secret-bibhu 
 
@@ -54,5 +54,5 @@ spec:
     app: node-strapi-cms
   ports:
   - protocol: TCP
-    port: 8080
-    targetPort: 8080
+    port: 80
+    targetPort: 8081
