@@ -1,13 +1,13 @@
 # Specifies which OS to use. Here it is unix OS pre-installed with node v-12
 FROM ubuntu:latest
 LABEL developer=bibhup_mishra@yahoo.com 
-RUN apt-get update -y
-RUN apt-get install curl -y
-RUN curl -sL https://deb.nodesource.com/setup_12.x 
-RUN apt-get install nodejs -y
-RUN apt-get install npm -y
+RUN apt-get update -y && \
+    apt-get install curl -y && \
+    curl -sL https://deb.nodesource.com/setup_12.x && \
+    apt-get install nodejs -y && \
+    apt-get install npm@6.14.6 -y && \
 # create folder <app> inside the container image
-RUN mkdir -p /app 
+    mkdir -p /app 
 
 # Set working directory within the image. Paths will be relative this WORKDIR. 
 WORKDIR /app
