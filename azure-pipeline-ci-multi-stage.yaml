@@ -29,62 +29,117 @@ stages:
         versionSpec: '12.x'
       displayName: 'Install NodeJS Runtime'
     - task: CopyFiles@2
-      displayName: 'Copy terrraform files to terraform folder'
+      displayName: 'Copy application code to k8 folder'
       inputs:
-        SourceFolder: terraform
-        TargetFolder: '$(build.artifactstagingdirectory)/terraform'
-    #Build the NodeJS code which will be deployed to Dev "Azure App Service"
-    - script: |
-        npm install
-        npm run build
-      displayName: 'npm install and build'
+        preserveTimestamp: true
+        cleanTargetFolder: true  
+        sourceFolder: '$(System.DefaultWorkingDirectory)'
+        Contents: |
+          *k8*.yaml
+        targetFolder: '$(build.artifactstagingdirectory)/k8'
     - task: CopyFiles@2
       displayName: 'Copy application code to www folder'
       inputs:
         preserveTimestamp: true
         cleanTargetFolder: true  
         sourceFolder: '$(System.DefaultWorkingDirectory)'
+        Contents: |
+          **
+          !.github/**
+          !.git/**
+          !ssl/**
+          !src/**
+          !terraform/**
+          !dal/csvdata/**
+          !*.txt
+          !*.yaml
+          !*.cmd
+          !*.sh
+          !*.md
+          !Jenkins*.*
+          !tailwind*.*
+          !babel*.*
+          !sonar*.*
+          !.dockerignore
+          !.gitignore
+          !Dockerfile
+          !LICENSE
         targetFolder: '$(build.artifactstagingdirectory)/www'
     - task: ArchiveFiles@2
       displayName: 'Create a deployable zip file from the www folder'
       inputs:
         rootFolderOrFile: '$(build.artifactstagingdirectory)/www'
-        archiveType: 'zip' 
-        archiveFile: '$(Build.ArtifactStagingDirectory)/strapicms.zip'
-        includeRootFolder: false        
-        replaceExistingArchive: true
+        archiveFile: '$(Build.ArtifactStagingDirectory)/strapi.zip' 
+        replaceExistingArchive: true 
+        includeRootFolder: false 
     - task: DeleteFiles@1
-      displayName: 'Delete www folder'
+      displayName: 'Delete the staging www folder post zipping'
       inputs:
-        SourceFolder: '$(build.artifactstagingdirectory)'
-        Contents: 'www' 
+        SourceFolder: '$(build.artifactstagingdirectory)/www'
+        Contents: |
+          **
+        RemoveSourceFolder: true       
     - task: PublishPipelineArtifact@1
       displayName: 'Publish Artifacts & Binaries to the drop folder'
       inputs:
         targetPath: '$(build.artifactstagingdirectory)'
-        artifact: 'drop'
+        artifact: ${{ variables.artifactName }}
         publishLocation: 'pipeline'
+  
+  - job: Dockerize
+    displayName: 'Create a Docker Image & Publish to Azure Container Registry - 113136'
+    pool:
+      name: "MyBuildAgents"
+      demand: node.js
+    condition:  eq('${{ variables.bBuildDockerImage }}', true)
+    dependsOn: Compile
+    steps:
+    - task: Docker@2
+      displayName: 'Login to ACR'
+      inputs:
+        command: login
+        containerRegistry: ${{ variables.privateContainerRegistry }}
 
 
-- stage: Infrastructure
-  displayName: 'Setup Infrastrucure in Azure'
-  pool:
-    name: "MyBuildAgents"
-    vmImage: ubuntu-latest
-    demand: node.js
-  jobs:
-  - template: azure-setup-appservice.yaml
-    parameters:
-      subscription: $(subscription)
-      terraformstoragerg: $(terraformStorageRG)
-      terraformstorageaccount: $(terraformStorageAccount)
-      terraformcontainer: $(terraformContainer)
+
+#- stage: Infrastructure
+#  displayName: 'Setup Infrastrucure in Azure'
+#  pool:
+#    name: "MyBuildAgents"
+#    vmImage: ubuntu-latest
+#    demand: node.js
+#  jobs:
+#  - template: azure-setup-appservice.yaml
+#    parameters:
+#      subscription: $(subscription)
+#      terraformstoragerg: $(terraformStorageRG)
+#      terraformstorageaccount: $(terraformStorageAccount)
+#      terraformcontainer: $(terraformContainer)
+
+#- stage: QA
+#  displayName: 'Deploy Code to QA Web App Service'
+#  pool:
+#    name: "MyBuildAgents"
+#    vmImage: ubuntu-latest
+#    demand: node.js
+#  dependsOn: 
+#  - Infrastructure
+#  - Build
+#  variables: 
+#    Environment: QA
+#  jobs:
+#  - template: azure-deploy-appservice-template.yaml
+#    parameters:
+#      environment: ${{ variables.environment }} 
+#      webAppRG: $(ResourceGroup)
+#      subscription: $(subscription)
+#      webAppName: '$(appServicePrefix)-qa'
 
 - stage: Development
-  displayName: 'Deploy Code to Devlopment Web App Service'
+  displayName: 'Deploy Code to Development Kubernetes Cluster'
+  condition: eq('${{ variables.bDeployToDev }}', true) 
   pool:
     name: "MyBuildAgents"
-    vmImage: ubuntu-latest
     demand: node.js
   dependsOn: 
   - Infrastructure
@@ -92,10 +147,9 @@ stages:
   variables: 
     Environment: Development
   jobs:
-  - template: azure-deploy-appservice-template.yaml
+  - template: azure-subpipeline-deploy-to-prod-k8-cluster.yaml
     parameters:
       environment: ${{ variables.environment }} 
-      webAppRG: $(ResourceGroup)
-      subscription: $(subscription)
-      webAppName: '$(appServicePrefix)-dev'
+      webAppName: '${{ variables.appServicePrefix }}-dev'
+      subscription: ${{ variables.subscription }}
 

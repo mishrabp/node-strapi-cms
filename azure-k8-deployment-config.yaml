@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-strapi-cms-deployment
+  labels: 
+    app: node-strapi-cms
+#specification for deployment
+spec:
+  replicas: 2 #no of pod replicas needed.
+  selector:
+    matchLabels:
+      app: node-strapi-cms
+  #template applies to Pod
+  template: 
+    metadata:
+      labels:
+        app: node-strapi-cms
+    #specification is the blueprint of a Pod
+    spec:
+      containers:   
+      - name: node-strapi-cms
+        image: bpm2021acr.azurecr.io/node-strapi-cms
+        imagePullPolicy: IfNotPresent
+        env: 
+        - name: DATABASE_HOST
+          value: 'devopsmasterlinuxvm.centralus.cloudapp.azure.com' 
+        - name: DATABASE_SRV
+          value: 'false' 
+        - name: DATABASE_PORT
+          value: '9003' 
+        - name: DATABASE_NAME
+          value: 'strapicms' 
+        - name: DATABASE_USERNAME
+          value: 'mongoadmin' 
+        - name: DATABASE_PASSWORD
+          value: 'passw0rd!' 
+        - name: AUTHENTICATION_DATABASE
+          value: '' 
+        - name: DATABASE_SSL
+          value: 'false' 
+        ports:
+        - containerPort: 8080    
+      imagePullSecrets:
+      - name: acr-secret-bibhu 
+
+---
+apiVersion: v1
+kind: Service
+metadata: 
+  name: node-strapi-cms-service  
+spec:
+  type: LoadBalancer
+  selector: 
+    app: node-strapi-cms
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8080

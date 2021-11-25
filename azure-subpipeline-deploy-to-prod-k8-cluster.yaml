@@ -1,0 +1,56 @@
+# deploy-appservice-template.yml
+# It deploys code into app services on Azure
+
+parameters:
+- name: environment # don't pass run-time variables
+- name: webAppName
+- name: subscription
+- name: artifactName
+  default: drop
+
+
+
+jobs:
+- deployment: DeployToK8Cluster
+  environment: ${{ parameters.environment }}
+  strategy: 
+    runOnce:
+      deploy:
+        steps:
+#        - download: none
+        - task: KubectlInstaller@0
+          inputs:
+            kubectlVersion: 'latest'
+
+        - task: replacetokens@3 #this replaces all tokens #{variable name}# with vaule of the variables
+          displayName: 'Replace tokens in terraform'
+          inputs:
+              rootDirectory: '$(Pipeline.Workspace)/drop/k8'
+              targetFiles: 'azure-k8-deployment-config.yaml'
+              encoding: 'auto'
+              writeBOM: true
+              actionOnMissing: 'warn'
+              keepToken: false
+              tokenPrefix: '#{'
+              tokenSuffix: '}#'
+              useLegacyPattern: false
+              enableTransforms: false
+              enableTelemetry: true
+
+        - task: Kubernetes@1
+          inputs:
+            connectionType: 'Azure Resource Manager'
+            azureSubscriptionEndpoint: ${{ parameters.subscription }}
+            azureResourceGroup: 'bpm-cowbird-rg'
+            kubernetesCluster: 'bpm-cowbird-aks'
+            useClusterAdmin: true
+            namespace: 'default'
+            command: 'apply'
+            useConfigurationFile: true
+            configuration: '$(Pipeline.Workspace)/drop/k8/azure-k8-deployment-config.yaml'
+            secretType: 'dockerRegistry'
+            containerRegistryType: 'Azure Container Registry'
+            azureSubscriptionEndpointForSecrets: ${{ parameters.subscription }}
+            azureContainerRegistry: 'bpm2021acr.azurecr.io'
+            secretName: 'acr-secret-bibhu'
+
