@@ -64,23 +64,24 @@ stages:
         npm install
         npm run build
       displayName: 'npm install and build'
-    - task: CopyFiles@2
-      displayName: 'Copy application code to www folder'
-      inputs:
-        contents: '**'
-        preserveTimestamp: true
-        cleanTargetFolder: true 
-        overWrite: true
-        flattenFolders: false
-        retryCount: 1 
-        sourceFolder: '$(System.DefaultWorkingDirectory)'
-        targetFolder: '$(build.artifactstagingdirectory)/www'
+#    - task: CopyFiles@2
+#      displayName: 'Copy application code to www folder'
+#      inputs:
+#        contents: '**'
+#        preserveTimestamp: true
+#        cleanTargetFolder: true 
+#        overWrite: true
+#        flattenFolders: false
+#        retryCount: 1 
+#        sourceFolder: '$(System.DefaultWorkingDirectory)'
+#        targetFolder: '$(build.artifactstagingdirectory)/www'
 
     - task: ArchiveFiles@2
       displayName: 'Create a deployable zip file from the www folder'
       inputs:
-        rootFolderOrFile: '$(build.artifactstagingdirectory)/www'
-        archiveFile: '$(Build.ArtifactStagingDirectory)/strapi.zip' 
+#        rootFolderOrFile: '$(build.artifactstagingdirectory)/www'
+        rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
+        archiveFile: '$(build.artifactstagingdirectory)/strapi.zip' 
         replaceExistingArchive: true 
         includeRootFolder: false 
 #    - task: DeleteFiles@1
