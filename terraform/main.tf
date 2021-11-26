@@ -80,7 +80,8 @@ resource "azurerm_app_service" "main" {
         "DATABASE_USERNAME" = "mongoadmin"
         "DATABASE_PASSWORD" = "passw0rd!"
         "AUTHENTICATION_DATABASE" = ""
-        "DATABASE_SSL" ="false"
+        "DATABASE_SSL" = "false"
+        "NODE_ENV" = "development"
     }
 }
 
