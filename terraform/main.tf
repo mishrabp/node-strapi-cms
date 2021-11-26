@@ -83,3 +83,28 @@ resource "azurerm_app_service" "dev" {
         "DATABASE_SSL" ="false"
     }
 }
+
+#Creating an App Service Slot for Development
+resource "azurerm_app_service_slot" "devslot" {
+    name = "staging"
+    app_service_name = azurerm_app_service.main.name 
+    location = azurerm_resource_group.main.location
+    resource_group_name = azurerm_resource_group.main.name
+    app_service_plan_id = azurerm_app_service_plan.main.id 
+
+    site_config {
+        linux_fx_version = "NODE|12-lts"
+        app_command_line = "npm start"
+    }
+    
+    app_settings = {
+        "DATABASE_HOST" = "devopsmasterlinuxvm.centralus.cloudapp.azure.com"
+        "DATABASE_SRV" = "false"
+        "DATABASE_PORT" = "9003"
+        "DATABASE_NAME" = "strapicms"
+        "DATABASE_USERNAME" = "mongoadmin"
+        "DATABASE_PASSWORD" = "passw0rd!"
+        "AUTHENTICATION_DATABASE" = ""
+        "DATABASE_SSL" ="false"
+    }
+}

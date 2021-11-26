@@ -6,7 +6,12 @@
 # Pipelibe only build docker image,  upload to ACR@113136, and Deploy to AKS@113136
 
 trigger:
-- main
+  branches:
+    include:
+    - main
+  paths:
+    include:
+    - '01.azure-main-pipeline-ci-acr-publish.yaml' # same as '/' for the repository root
 
 #what to clean up before the job runs (outputs | resources | all)
 pool:

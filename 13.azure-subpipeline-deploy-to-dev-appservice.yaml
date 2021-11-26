@@ -12,6 +12,7 @@ parameters:
 jobs:
 - deployment: DeployToWebAppService
   environment: ${{ parameters.environment }}
+  displayName: 'Deploy to Azure App Service'
   strategy: 
     runOnce:
       deploy:
