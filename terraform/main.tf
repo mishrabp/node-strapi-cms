@@ -61,7 +61,7 @@ resource "azurerm_app_service_plan" "my" {
 }
 
 #Creating an App Service for Development
-resource "azurerm_app_service" "dev" {
+resource "azurerm_app_service" "main" {
     name = "${var.app_service_name_prefix}-dev"
     location = azurerm_resource_group.my.location
     resource_group_name = azurerm_resource_group.my.name
