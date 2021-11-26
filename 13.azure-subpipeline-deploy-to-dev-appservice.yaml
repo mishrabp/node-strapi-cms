@@ -24,7 +24,7 @@ jobs:
             buildType: 'current'
             downloadType: 'single'
             artifactName: ${{ parameters.artifactName }}
-#            pattern: drop/strapi.zip
+            pattern: drop/strapi.zip
             targetPath: '$(System.DefaultWorkingDirectory)/publish'
         - task: AzureRmWebAppDeployment@4
           displayName: 'Deploy the packaged zip to App Service Staging Slot'
