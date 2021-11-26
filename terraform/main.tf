@@ -39,16 +39,16 @@ variable "app_service_name_prefix" {
 }
 
 #Creating a resource group
-resource "azurerm_resource_group" "my" {
+resource "azurerm_resource_group" "main" {
     name = var.resource_group_name
     location = var.resource_group_location
 }
 
 #Creating an App Service plan
-resource "azurerm_app_service_plan" "my" {
+resource "azurerm_app_service_plan" "main" {
     name = var.app_service_plan_name
-    location = azurerm_resource_group.my.location
-    resource_group_name = azurerm_resource_group.my.name
+    location = azurerm_resource_group.main.location
+    resource_group_name = azurerm_resource_group.main.name
 
     kind = "Linux"
     reserved = true
@@ -63,9 +63,9 @@ resource "azurerm_app_service_plan" "my" {
 #Creating an App Service for Development
 resource "azurerm_app_service" "main" {
     name = "${var.app_service_name_prefix}-dev"
-    location = azurerm_resource_group.my.location
-    resource_group_name = azurerm_resource_group.my.name
-    app_service_plan_id = azurerm_app_service_plan.my.id 
+    location = azurerm_resource_group.main.location
+    resource_group_name = azurerm_resource_group.main.name
+    app_service_plan_id = azurerm_app_service_plan.main.id 
 
     site_config {
         dotnet_framework_version = "v4.0"
@@ -85,7 +85,7 @@ resource "azurerm_app_service" "main" {
 }
 
 #Creating an App Service Slot for Development
-resource "azurerm_app_service_slot" "devslot" {
+resource "azurerm_app_service_slot" "main" {
     name = "staging"
     app_service_name = azurerm_app_service.main.name 
     location = azurerm_resource_group.main.location
