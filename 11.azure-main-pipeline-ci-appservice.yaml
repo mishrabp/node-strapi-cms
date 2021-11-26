@@ -20,7 +20,7 @@ variables:
 - name: bCompileCode
   value: true 
 - name: bBuildInfrastructure
-  value: true 
+  value: false 
 - name: bDeployToDev
   value: true 
 #Pipeline Variables
@@ -77,11 +77,11 @@ stages:
         archiveFile: '$(Build.ArtifactStagingDirectory)/strapi.zip' 
         replaceExistingArchive: true 
         includeRootFolder: false 
-    - task: DeleteFiles@1
-      displayName: 'Delete the staging www folder post zipping'
-      inputs:
-        SourceFolder: '$(build.artifactstagingdirectory)/www'
-        RemoveSourceFolder: true       
+#    - task: DeleteFiles@1
+#      displayName: 'Delete the staging www folder post zipping'
+#      inputs:
+#        SourceFolder: '$(build.artifactstagingdirectory)/www'
+#        RemoveSourceFolder: true       
     - task: PublishPipelineArtifact@1
       displayName: 'Publish Artifacts & Binaries to the drop folder'
       inputs:
