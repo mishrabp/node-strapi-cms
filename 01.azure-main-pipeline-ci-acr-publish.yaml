@@ -17,12 +17,10 @@ pool:
 variables:
 - group: PipelineVariableGroup
 #Build & Deployment flags used for debugging & troubleshooting
-- name: bBuildInfrastructure
-  value: true 
-- name: bDeployToDev
-  value: true 
 - name: bBuildDockerImage
   value: true 
+- name: bDeployToQA
+  value: true
 #Pipeline Variables
 - name: appServicePlan
   value: 'node-strapi-cms-sp' 
@@ -102,7 +100,7 @@ stages:
 
 - stage: QA
   displayName: 'Deploy Image to AKS'
-  condition: eq('${{ variables.bDeployToDev }}', true) 
+  condition: eq('${{ variables.bDeployToQA }}', true) 
   pool:
     name: "MyBuildAgents"
   dependsOn: 

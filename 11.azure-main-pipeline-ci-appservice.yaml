@@ -1,0 +1,136 @@
+# Node.js
+# Build a strapi CMS Node.js project with npm.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript 
+
+# Pipeline deploys to Azure AppSerice 
+
+trigger:
+- main
+
+#what to clean up before the job runs (outputs | resources | all)
+pool:
+  name: "MyBuildAgents"
+  vmImage: ubuntu-latest
+  demand: node.js
+
+variables:
+- group: PipelineVariableGroup
+#Build & Deployment flags used for debugging & troubleshooting
+- name: bBuildInfrastructure
+  value: true 
+- name: bDeployToDev
+  value: true 
+#Pipeline Variables
+- name: appServicePlan
+  value: 'node-strapi-cms-sp' 
+- name: appServicePrefix
+  value: 'node-strapi-cms' 
+- name: resourceGroup
+  value: 'node-strapi-cms-rg' 
+- name: resourceLocation
+  value: 'West US 2' 
+- name: subscription
+  value: 'Visual Studio Enterprise Subscription - 113136' 
+- name: artifactName
+  value: 'drop'
+#Terraform Storage Variables
+- name: terraformContainer
+  value: 'node-strapi-cms-terraform' 
+- name: terraformStorageAccount
+  value: 'terraformsabibhu2021' 
+- name: terraformStorageRG
+  value: 'terraformstoragergp' 
+
+
+stages:
+- stage: Build
+  displayName: "Build Code from GitHub"
+  jobs:
+  - job: Download
+    displayName: 'Compiling Code....' 
+    steps:
+    - task: NodeTool@0
+      inputs:
+        versionSpec: '12.x'
+      displayName: 'Install NodeJS Runtime'
+    #Build the NodeJS code which will be deployed to QA "Azure App Service"
+    - script: |
+        npm install
+        npm run build
+      displayName: 'npm install and build'
+    - task: CopyFiles@2
+      displayName: 'Copy application code to www folder'
+      inputs:
+        preserveTimestamp: true
+        cleanTargetFolder: true  
+        sourceFolder: '$(System.DefaultWorkingDirectory)'
+        Contents: |
+          **
+          !.github/**
+          !.git/**
+          !ssl/**
+          !src/**
+          !terraform/**
+          !dal/csvdata/**
+          !*.txt
+          !*.yaml
+          !*.cmd
+          !*.sh
+          !*.md
+          !Jenkins*.*
+          !tailwind*.*
+          !babel*.*
+          !sonar*.*
+          !.dockerignore
+          !.gitignore
+          !Dockerfile
+          !LICENSE
+        targetFolder: '$(build.artifactstagingdirectory)/www'
+
+    - task: ArchiveFiles@2
+      displayName: 'Create a deployable zip file from the www folder'
+      inputs:
+        rootFolderOrFile: '$(build.artifactstagingdirectory)/www'
+        archiveFile: '$(Build.ArtifactStagingDirectory)/strapi.zip' 
+        replaceExistingArchive: true 
+        includeRootFolder: false 
+    - task: DeleteFiles@1
+      displayName: 'Delete the staging www folder post zipping'
+      inputs:
+        SourceFolder: '$(build.artifactstagingdirectory)/www'
+        Contents: |
+          **
+        RemoveSourceFolder: true       
+    - task: PublishPipelineArtifact@1
+      displayName: 'Publish Artifacts & Binaries to the drop folder'
+      inputs:
+        targetPath: '$(build.artifactstagingdirectory)'
+        artifact: ${{ variables.artifactName }}
+        publishLocation: 'pipeline'
+  
+- stage: Infrastructure
+  displayName: 'Setup Infrastrucure in Azure'
+  condition: eq('${{ variables.bBuildInfrastructure }}', true) 
+  dependsOn: Build
+  jobs:
+  - template: 12.azure-sub-pipeline-setup-appservice-infrastructure.yaml
+    parameters:
+      subscription: ${{ variables.subscription }}
+      terraformstoragerg: ${{ variables.terraformStorageRG }}
+      terraformstorageaccount: ${{ variables.terraformStorageAccount }}
+      terraformcontainer: ${{ variables.terraformContainer }}
+
+- stage: Development
+  displayName: 'Deploy Code to Development Web App Service'
+  condition: eq('${{ variables.bDeployToDev }}', true) 
+  dependsOn: Infrastructure
+  variables: 
+    Environment: Development
+  jobs:
+  - template: 13.azure-subpipeline-deploy-to-dev-appservice.yaml
+    parameters:
+      environment: ${{ variables.environment }} 
+      webAppName: '${{ variables.appServicePrefix }}-dev'
+      subscription: ${{ variables.subscription }}
+      webAppRG: '${{ variables.resourceGroup }}'

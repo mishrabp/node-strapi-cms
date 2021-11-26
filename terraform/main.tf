@@ -54,8 +54,8 @@ resource "azurerm_app_service_plan" "my" {
     reserved = true
 
     sku {
-        tier = "Basic"
-        size = "B1"
+        tier = "Standard"
+        size = "S1"
     }
 
 }
@@ -81,11 +81,5 @@ resource "azurerm_app_service" "dev" {
         "DATABASE_PASSWORD" = "passw0rd!"
         "AUTHENTICATION_DATABASE" = ""
         "DATABASE_SSL" ="false"
-    }
-
-    connection_string {
-        name  = "Database"
-        type  = "SQLServer"
-        value = "Server=some-server.mydomain.com;Integrated Security=SSPI"
     }
 }
