@@ -51,7 +51,7 @@ stages:
   condition: eq('${{ variables.bCompileCode }}', true)
   jobs:
   - job: Download
-    displayName: 'Compiling Code....' 
+    displayName: 'Downloading Code....' 
     steps:
     - task: NodeTool@0
       inputs:
@@ -63,7 +63,7 @@ stages:
         npm -v
         npm install
         npm run build
-      displayName: 'npm install and build'
+      displayName: 'Compiling....'
 #    - task: CopyFiles@2
 #      displayName: 'Copy application code to www folder'
 #      inputs:
@@ -77,28 +77,30 @@ stages:
 #        targetFolder: '$(build.artifactstagingdirectory)/www'
 
     - task: ArchiveFiles@2
-      displayName: 'Create a deployable zip file from the www folder'
+      displayName: 'Packaging into a zip artificat....'
       inputs:
 #        rootFolderOrFile: '$(build.artifactstagingdirectory)/www'
         rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
-        archiveFile: '$(build.artifactstagingdirectory)/strapi.zip' 
+        archiveFile: '$(build.artifactstagingdirectory)/strapi.zip'
+        archiveType: 'zip'
+        tarCompression: 'gz' 
         replaceExistingArchive: true 
         includeRootFolder: false 
     - task: DeleteFiles@1
-      displayName: 'Delete the staging www folder post zipping'
+      displayName: 'Deleting intermediatary fies....'
       inputs:
         Contents: '!(strapi.zip)'
         SourceFolder: '$(build.artifactstagingdirectory)'
         RemoveSourceFolder: true       
     - task: PublishPipelineArtifact@1
-      displayName: 'Publish Artifacts & Binaries to the drop folder'
+      displayName: 'Publishing artifcat....'
       inputs:
         targetPath: '$(build.artifactstagingdirectory)'
         artifact: ${{ variables.artifactName }}
         publishLocation: 'pipeline'
   
 - stage: Infrastructure
-  displayName: 'Setup Infrastrucure in Azure'
+  displayName: 'Setting up Azure App Services....'
   condition: eq('${{ variables.bBuildInfrastructure }}', true) 
   dependsOn: Build
   jobs:
@@ -110,7 +112,7 @@ stages:
       terraformcontainer: ${{ variables.terraformContainer }}
 
 - stage: Development
-  displayName: 'Deploy Code to Development Web App Service'
+  displayName: 'Deploying artifacts to App Service....'
   condition: eq('${{ variables.bDeployToDev }}', true) 
   dependsOn: Infrastructure
   variables: 
