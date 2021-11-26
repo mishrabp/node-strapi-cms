@@ -68,27 +68,6 @@ stages:
         preserveTimestamp: true
         cleanTargetFolder: true  
         sourceFolder: '$(System.DefaultWorkingDirectory)'
-        Contents: |
-          **
-          !.github/**
-          !.git/**
-          !ssl/**
-          !src/**
-          !terraform/**
-          !dal/csvdata/**
-          !*.txt
-          !*.yaml
-          !*.cmd
-          !*.sh
-          !*.md
-          !Jenkins*.*
-          !tailwind*.*
-          !babel*.*
-          !sonar*.*
-          !.dockerignore
-          !.gitignore
-          !Dockerfile
-          !LICENSE
         targetFolder: '$(build.artifactstagingdirectory)/www'
 
     - task: ArchiveFiles@2
