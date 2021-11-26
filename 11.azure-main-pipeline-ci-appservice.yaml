@@ -59,14 +59,20 @@ stages:
       displayName: 'Install NodeJS Runtime'
     #Build the NodeJS code which will be deployed to QA "Azure App Service"
     - script: |
+        node -v
+        npm -v
         npm install
         npm run build
       displayName: 'npm install and build'
     - task: CopyFiles@2
       displayName: 'Copy application code to www folder'
       inputs:
+        contents: '**'
         preserveTimestamp: true
-        cleanTargetFolder: true  
+        cleanTargetFolder: true 
+        overWrite: true
+        flattenFolders: false
+        retryCount: 1 
         sourceFolder: '$(System.DefaultWorkingDirectory)'
         targetFolder: '$(build.artifactstagingdirectory)/www'
 
