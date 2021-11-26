@@ -20,6 +20,13 @@ spec:
       containers:   
       - name: node-strapi-cms
         image: bpm2021acr.azurecr.io/node-strapi-cms
+        resources:
+          limits:
+            memory: 512Mi
+            cpu: "1"
+          requests:
+            memory: 256Mi
+            cpu: "0.2"
         imagePullPolicy: IfNotPresent
         env: 
         - name: DATABASE_HOST

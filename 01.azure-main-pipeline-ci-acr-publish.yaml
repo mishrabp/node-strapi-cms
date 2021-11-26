@@ -1,9 +1,9 @@
 # Node.js
-# Build a general Node.js project with npm.
+# Build a strapi CMS Node.js project with npm.
 # Add steps that analyze code, save build artifacts, deploy, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/javascript 
 
-# Pipelibe only build docker image and uploads to Azure Container Registry @113136 NTT Azure Accoount
+# Pipelibe only build docker image,  upload to ACR@113136, and Deploy to AKS@113136
 
 trigger:
 - main
@@ -83,7 +83,6 @@ stages:
     displayName: 'Building Docker Image....'
     pool:
       name: "MyBuildAgents"
-      demand: node.js
     condition:  eq('${{ variables.bBuildDockerImage }}', true)
     dependsOn: Download
     steps:
@@ -101,55 +100,19 @@ stages:
         Dockerfile: '$(System.DefaultWorkingDirectory)/**/Dockerfile'
         tags: ${{ variables.tagName }}
 
-
-
-#- stage: Infrastructure
-#  displayName: 'Setup Infrastrucure in Azure'
-#  pool:
-#    name: "MyBuildAgents"
-#    vmImage: ubuntu-latest
-#    demand: node.js
-#  jobs:
-#  - template: azure-setup-appservice.yaml
-#    parameters:
-#      subscription: $(subscription)
-#      terraformstoragerg: $(terraformStorageRG)
-#      terraformstorageaccount: $(terraformStorageAccount)
-#      terraformcontainer: $(terraformContainer)
-
-#- stage: QA
-#  displayName: 'Deploy Code to QA Web App Service'
-#  pool:
-#    name: "MyBuildAgents"
-#    vmImage: ubuntu-latest
-#    demand: node.js
-#  dependsOn: 
-#  - Infrastructure
-#  - Build
-#  variables: 
-#    Environment: QA
-#  jobs:
-#  - template: azure-deploy-appservice-template.yaml
-#    parameters:
-#      environment: ${{ variables.environment }} 
-#      webAppRG: $(ResourceGroup)
-#      subscription: $(subscription)
-#      webAppName: '$(appServicePrefix)-qa'
-
-- stage: Development
+- stage: QA
   displayName: 'Deploy Image to AKS'
   condition: eq('${{ variables.bDeployToDev }}', true) 
   pool:
     name: "MyBuildAgents"
-    demand: node.js
   dependsOn: 
   - Download
   variables: 
-    Environment: Development
+    Environment: QA
   jobs:
-  - template: azure-subpipeline-deploy-to-prod-k8-cluster.yaml
+  - template: 02.azure-sub-pipeline-deploy-to-aks-cluster.yaml
     parameters:
       environment: ${{ variables.environment }} 
-      webAppName: '${{ variables.appServicePrefix }}-dev'
+      webAppName: '${{ variables.appServicePrefix }}-qa'
       subscription: ${{ variables.subscription }}
 
