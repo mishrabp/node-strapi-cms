@@ -17,10 +17,12 @@ pool:
 variables:
 - group: PipelineVariableGroup
 #Build & Deployment flags used for debugging & troubleshooting
+- name: bCompileCode
+  value: false 
 - name: bBuildInfrastructure
   value: true 
 - name: bDeployToDev
-  value: true 
+  value: false 
 #Pipeline Variables
 - name: appServicePlan
   value: 'node-strapi-cms-sp' 
@@ -46,6 +48,7 @@ variables:
 stages:
 - stage: Build
   displayName: "Build Code from GitHub"
+  condition: eq('${{ variables.bBuildInfrastructure }}', true)
   jobs:
   - job: Download
     displayName: 'Compiling Code....' 
