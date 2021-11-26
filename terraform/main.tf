@@ -93,7 +93,7 @@ resource "azurerm_app_service_slot" "main" {
     app_service_plan_id = azurerm_app_service_plan.main.id 
 
     site_config {
-        linux_fx_version = "NODE|12-lts"
+        linux_fx_version = "NODE|14-lts"
         app_command_line = "npm start"
     }
     
