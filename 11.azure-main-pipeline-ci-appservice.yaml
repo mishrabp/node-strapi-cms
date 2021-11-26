@@ -48,7 +48,7 @@ variables:
 stages:
 - stage: Build
   displayName: "Build Code from GitHub"
-  condition: eq('${{ variables.bBuildInfrastructure }}', true)
+  condition: eq('${{ variables.bCompileCode }}', true)
   jobs:
   - job: Download
     displayName: 'Compiling Code....' 
