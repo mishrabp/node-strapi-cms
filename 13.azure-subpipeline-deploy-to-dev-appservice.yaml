@@ -19,21 +19,21 @@ jobs:
         steps:
         - download: none
         - task: DownloadPipelineArtifact@2
-          displayName: 'Download the packaged zip'
+          displayName: 'Downloading zip....'
           inputs:
             buildType: 'current'
             downloadType: 'single'
             artifactName: ${{ parameters.artifactName }}
-            pattern: drop/strapi.zip
+            pattern: drop/strapi.tar.gz
             targetPath: '$(System.DefaultWorkingDirectory)/publish'
         - task: AzureRmWebAppDeployment@4
-          displayName: 'Deploy the packaged zip to App Service Staging Slot'
+          displayName: 'Publish zip to App Service....'
           inputs:
             ConnectionType: 'AzureRM'
             azureSubscription: ${{ parameters.subscription }}
             appType: 'webAppLinux'  #its webApp for windows based apps. webAppLinux for linux based apps
             WebAppName: ${{ parameters.webAppName }}
-            packageForLinux: '$(System.DefaultWorkingDirectory)/publish/strapi.zip'
+            packageForLinux: '$(System.DefaultWorkingDirectory)/publish/strapi.tar.gz'
             ResourceGroupName: ${{ parameters.webAppRG }}
             StartupCommand: 'npm start'
             #Deploying to staging slot
