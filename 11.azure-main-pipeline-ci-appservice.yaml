@@ -77,16 +77,23 @@ stages:
 #        sourceFolder: '$(System.DefaultWorkingDirectory)'
 #        targetFolder: '$(build.artifactstagingdirectory)/www'
 
-    - task: ArchiveFiles@2
-      displayName: 'Packaging into a zip artificat....'
-      inputs:
+#    - task: ArchiveFiles@2
+#      displayName: 'Packaging into a zip artificat....'
+#      inputs:
 #        rootFolderOrFile: '$(build.artifactstagingdirectory)/www'
-        rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
-        archiveFile: '$(build.artifactstagingdirectory)/strapi.zip'
-        archiveType: 'zip'
-        tarCompression: 'None' 
-        replaceExistingArchive: true 
-        includeRootFolder: true 
+#        rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
+#        archiveFile: '$(build.artifactstagingdirectory)/strapi.zip'
+#        archiveType: 'zip'
+#        tarCompression: 'None' 
+#        replaceExistingArchive: true 
+#        includeRootFolder: true 
+    - task: PowerShell@2
+      displayName: 'Inline Powershell'
+      inputs:
+        TargetType: inline
+        Script: |
+          Compress-Archive -Path "$(System.DefaultWorkingDirectory)" -DestinationPath "$(build.artifactstagingdirectory)/strapi.zip"
+        pwsh: true    
     - task: DeleteFiles@1
       displayName: 'Deleting intermediatary fies....'
       inputs:
