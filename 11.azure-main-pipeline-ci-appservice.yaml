@@ -88,7 +88,8 @@ stages:
 #        replaceExistingArchive: true 
 #        includeRootFolder: true 
     - script: |
-        zip -r "$(build.artifactstagingdirectory)/strapi.zip" "$(System.DefaultWorkingDirectory)/*" 
+        zip -r "$(build.artifactstagingdirectory)/strapi.zip" "$(System.DefaultWorkingDirectory)/" 
+      displayName: 'Packaging into a zip artificat....'
     - task: DeleteFiles@1
       displayName: 'Deleting intermediatary fies....'
       inputs:
