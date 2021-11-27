@@ -81,8 +81,8 @@ stages:
       displayName: 'Packaging into a zip artificat....'
       inputs:
         rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
-        archiveFile: '$(build.artifactstagingdirectory)/strapi.tar.gz'
-        archiveType: 'tar'
+        archiveFile: '$(build.artifactstagingdirectory)/strapi.zip'
+        archiveType: 'zip'
         tarCompression: 'gz' 
         replaceExistingArchive: true 
         includeRootFolder: true 

@@ -24,7 +24,7 @@ jobs:
             buildType: 'current'
             downloadType: 'single'
             artifactName: ${{ parameters.artifactName }}
-            pattern: drop/strapi.tar.gz
+            pattern: drop/strapi.zip
             targetPath: '$(System.DefaultWorkingDirectory)/publish'
         - task: AzureRmWebAppDeployment@4
           displayName: 'Publish zip to App Service....'
@@ -33,7 +33,7 @@ jobs:
             azureSubscription: ${{ parameters.subscription }}
             appType: 'webAppLinux'  #its webApp for windows based apps. webAppLinux for linux based apps
             WebAppName: ${{ parameters.webAppName }}
-            packageForLinux: '$(System.DefaultWorkingDirectory)/publish/strapi.tar.gz'
+            packageForLinux: '$(System.DefaultWorkingDirectory)/publish/strapi.zip'
             ResourceGroupName: ${{ parameters.webAppRG }}
             StartupCommand: 'npm start'
             #Deploying to staging slot
