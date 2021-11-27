@@ -18,38 +18,24 @@ jobs:
       deploy:
         steps:
         - download: none
-#        - task: DownloadPipelineArtifact@2
-#          displayName: 'Downloading zip....'
-#          inputs:
-#            buildType: 'current'
-#            downloadType: 'single'
-#            artifactName: ${{ parameters.artifactName }}
-#            pattern: drop/strapi.zip
-#            targetPath: '$(System.DefaultWorkingDirectory)/publish'
-#        - task: AzureRmWebAppDeployment@4
-#          displayName: 'Publish zip to App Service....'
-#          inputs:
-#            ConnectionType: 'AzureRM'
-#            azureSubscription: ${{ parameters.subscription }}
-#            appType: 'webAppLinux'  #its webApp for windows based apps. webAppLinux for linux based apps
-#            WebAppName: ${{ parameters.webAppName }}
-#            packageForLinux: '$(System.DefaultWorkingDirectory)/publish/strapi.zip'
-#            ResourceGroupName: ${{ parameters.webAppRG }}
-#            StartupCommand: 'npm start'
-#            #Deploying to staging slot
-#            deployToSlotOrASE: true
-#            SlotName: 'staging'
+        - task: DownloadPipelineArtifact@2
+          displayName: 'Downloading zip....'
+          inputs:
+            buildType: 'current'
+            downloadType: 'single'
+            artifactName: ${{ parameters.artifactName }}
+            pattern: drop/strapi.zip
+            targetPath: '$(System.DefaultWorkingDirectory)/publish'
         - task: AzureRmWebAppDeployment@4
           displayName: 'Publish zip to App Service....'
           inputs:
             ConnectionType: 'AzureRM'
             azureSubscription: ${{ parameters.subscription }}
-            appType: 'webAppContainer'  #its webApp for windows based apps. webAppLinux for linux based apps
-            DockerNamespace: 'bpm2021acr.azurecr.io'
-            DockerRepository: 'node-strapi-cms'
-            DockerImageTag: 'latest'
+            appType: 'webAppLinux'  #its webApp for windows based apps. webAppLinux for linux based apps
             WebAppName: ${{ parameters.webAppName }}
+            packageForLinux: '$(System.DefaultWorkingDirectory)/publish/strapi.zip'
             ResourceGroupName: ${{ parameters.webAppRG }}
+            StartupCommand: 'npm start'
             #Deploying to staging slot
             deployToSlotOrASE: true
             SlotName: 'staging'

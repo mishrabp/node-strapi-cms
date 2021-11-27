@@ -1,0 +1,84 @@
+# Node.js
+# Build a strapi CMS Node.js project with npm.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript 
+
+# Pipeline deploys to Azure AppSerice 
+
+trigger:
+- main
+
+#what to clean up before the job runs (outputs | resources | all)
+pool:
+  name: "MyBuildAgents"
+  vmImage: ubuntu-latest
+  demand: node.js
+
+variables:
+- group: PipelineVariableGroup
+#Build & Deployment flags used for debugging & troubleshooting
+- name: bCompileCode
+  value: true 
+- name: bBuildInfrastructure
+  value: true 
+- name: bDeployToDev
+  value: true 
+#Pipeline Variables
+- name: appServicePlan
+  value: 'node-strapi-cms-sp' 
+- name: appServicePrefix
+  value: 'node-strapi-cms' 
+- name: resourceGroup
+  value: 'node-strapi-cms-rg' 
+- name: resourceLocation
+  value: 'West US 2' 
+- name: subscription
+  value: 'Visual Studio Enterprise Subscription - 113136' 
+- name: artifactName
+  value: 'drop'
+#Terraform Storage Variables
+- name: terraformContainer
+  value: 'node-strapi-cms-terraform' 
+- name: terraformStorageAccount
+  value: 'terraformsabibhu2021' 
+- name: terraformStorageRG
+  value: 'terraformstoragergp' 
+
+
+stages:
+- stage: Infrastructure
+  displayName: 'Stage: Infrastructure'
+  condition: eq('${{ variables.bBuildInfrastructure }}', true) 
+  jobs:
+  - template: 12.azure-sub-pipeline-setup-appservice-infrastructure.yaml
+    parameters:
+      subscription: ${{ variables.subscription }}
+      terraformstoragerg: ${{ variables.terraformStorageRG }}
+      terraformstorageaccount: ${{ variables.terraformStorageAccount }}
+      terraformcontainer: ${{ variables.terraformContainer }}
+
+- stage: Download
+  displayName: "Download Code from GitHub"
+  dependsOn: Infrastructure
+  jobs:
+  - job: Dockerize
+    displayName: 'Building Docker Image....'
+    pool:
+      name: "MyBuildAgents"
+    condition:  eq('${{ variables.bBuildDockerImage }}', true)
+    dependsOn: Download
+    steps:
+    - task: Docker@2
+      displayName: 'Login to ACR'
+      inputs:
+        command: login
+        containerRegistry: ${{ variables.privateContainerRegistry }}
+    - task: Docker@2
+      displayName: 'Public Docker Image to ACR....'
+      inputs:
+        command: 'buildAndPush'
+        containerRegistry: ${{ variables.privateContainerRegistry }}
+        repository: ${{ variables.privateRepository }}
+        Dockerfile: '$(System.DefaultWorkingDirectory)/**/Dockerfile'
+        tags: ${{ variables.tagName }}
+
