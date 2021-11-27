@@ -61,8 +61,8 @@ stages:
     - script: |
         node -v
         npm -v
+        npm cache clean --force
         npm install
-        npm install strapi
         npm run build
       displayName: 'Compiling....'
 #    - task: CopyFiles@2
