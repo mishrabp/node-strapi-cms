@@ -62,6 +62,7 @@ stages:
         node -v
         npm -v
         npm install
+        npm install strapi
         npm run build
       displayName: 'Compiling....'
 #    - task: CopyFiles@2
