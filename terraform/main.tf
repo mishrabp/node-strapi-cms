@@ -112,11 +112,11 @@ resource "azurerm_app_service_slot" "main" {
 }
 
 #Creating an App Service for Development2
-resource "azurerm_app_service" "main" {
+resource "azurerm_app_service" "main-dev2" {
     name = "${var.app_service_name_prefix}-dev2"
-    location = azurerm_resource_group.main.location
-    resource_group_name = azurerm_resource_group.main.name
-    app_service_plan_id = azurerm_app_service_plan.main.id 
+    location = azurerm_resource_group.main-dev2.location
+    resource_group_name = azurerm_resource_group.main-dev2.name
+    app_service_plan_id = azurerm_app_service_plan.main-dev2.id 
 
     site_config {
         linux_fx_version = "DOCKER|appsvcsample/static-site:latest"

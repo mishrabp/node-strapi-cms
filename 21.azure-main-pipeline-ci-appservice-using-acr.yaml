@@ -17,7 +17,7 @@ pool:
 variables:
 - group: PipelineVariableGroup
 #Build & Deployment flags used for debugging & troubleshooting
-- name: bCompileCode
+- name: bBuildDockerImage
   value: true 
 - name: bBuildInfrastructure
   value: true 
