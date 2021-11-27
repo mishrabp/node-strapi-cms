@@ -84,9 +84,9 @@ stages:
         rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
         archiveFile: '$(build.artifactstagingdirectory)/strapi.zip'
         archiveType: 'zip'
-        tarCompression: 'gz' 
+        tarCompression: 'None' 
         replaceExistingArchive: true 
-        includeRootFolder: false 
+        includeRootFolder: true 
     - task: DeleteFiles@1
       displayName: 'Deleting intermediatary fies....'
       inputs:
