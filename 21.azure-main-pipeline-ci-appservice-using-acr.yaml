@@ -46,20 +46,8 @@ variables:
 
 
 stages:
-- stage: Infrastructure
-  displayName: 'Stage: Infrastructure'
-  condition: eq('${{ variables.bBuildInfrastructure }}', true) 
-  jobs:
-  - template: 12.azure-sub-pipeline-setup-appservice-infrastructure.yaml
-    parameters:
-      subscription: ${{ variables.subscription }}
-      terraformstoragerg: ${{ variables.terraformStorageRG }}
-      terraformstorageaccount: ${{ variables.terraformStorageAccount }}
-      terraformcontainer: ${{ variables.terraformContainer }}
-
 - stage: Download
   displayName: "Download Code from GitHub"
-  dependsOn: Infrastructure
   jobs:
   - job: Dockerize
     displayName: 'Building Docker Image....'
@@ -81,4 +69,16 @@ stages:
         repository: ${{ variables.privateRepository }}
         Dockerfile: '$(System.DefaultWorkingDirectory)/**/Dockerfile'
         tags: ${{ variables.tagName }}
+
+- stage: Infrastructure
+  displayName: 'Stage: Infrastructure'
+  condition: eq('${{ variables.bBuildInfrastructure }}', true) 
+  jobs:
+  - template: 12.azure-sub-pipeline-setup-appservice-infrastructure.yaml
+    parameters:
+      subscription: ${{ variables.subscription }}
+      terraformstoragerg: ${{ variables.terraformStorageRG }}
+      terraformstorageaccount: ${{ variables.terraformStorageAccount }}
+      terraformcontainer: ${{ variables.terraformContainer }}
+
 
