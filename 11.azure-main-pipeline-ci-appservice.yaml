@@ -87,13 +87,8 @@ stages:
 #        tarCompression: 'None' 
 #        replaceExistingArchive: true 
 #        includeRootFolder: true 
-    - task: PowerShell@2
-      displayName: 'Inline Powershell'
-      inputs:
-        TargetType: inline
-        Script: |
-          Compress-Archive -Path "$(System.DefaultWorkingDirectory)" -DestinationPath "$(build.artifactstagingdirectory)/strapi.zip"
-        pwsh: true    
+    - script: |
+        zip -r "$(build.artifactstagingdirectory)/strapi.zip" "$(System.DefaultWorkingDirectory)/*" 
     - task: DeleteFiles@1
       displayName: 'Deleting intermediatary fies....'
       inputs:
