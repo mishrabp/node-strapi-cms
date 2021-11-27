@@ -45,7 +45,9 @@ jobs:
             ConnectionType: 'AzureRM'
             azureSubscription: ${{ parameters.subscription }}
             appType: 'webAppContainer'  #its webApp for windows based apps. webAppLinux for linux based apps
-            DockerRepository: 'bpm2021acr.azurecr.io/node-strapi-cms:latest'
+            DockerNamespace: 'bpm2021acr.azurecr.io'
+            DockerRepository: 'node-strapi-cms'
+            DockerImageTag: 'latest'
             WebAppName: ${{ parameters.webAppName }}
             ResourceGroupName: ${{ parameters.webAppRG }}
             #Deploying to staging slot
