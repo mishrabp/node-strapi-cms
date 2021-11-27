@@ -110,3 +110,38 @@ resource "azurerm_app_service_slot" "main" {
         "NODE_ENV" = "development"
    }
 }
+
+#Creating an App Service for Development2
+resource "azurerm_app_service" "main" {
+    name = "${var.app_service_name_prefix}-dev2"
+    location = azurerm_resource_group.main.location
+    resource_group_name = azurerm_resource_group.main.name
+    app_service_plan_id = azurerm_app_service_plan.main.id 
+
+    site_config {
+        linux_fx_version = "DOCKER|appsvcsample/static-site:latest"
+        always_on        = "true"
+    }
+    
+    app_settings = {
+        "DATABASE_HOST" = "devopsmasterlinuxvm.centralus.cloudapp.azure.com"
+        "DATABASE_SRV" = "false"
+        "DATABASE_PORT" = "9003"
+        "DATABASE_NAME" = "strapicms"
+        "DATABASE_USERNAME" = "mongoadmin"
+        "DATABASE_PASSWORD" = "passw0rd!"
+        "AUTHENTICATION_DATABASE" = ""
+        "DATABASE_SSL" = "false"
+        "NODE_ENV" = "development"
+
+        WEBSITES_ENABLE_APP_SERVICE_STORAGE = false
+        # Settings for private Container Registires  
+        DOCKER_REGISTRY_SERVER_URL      = "https://bpm2021acr.azurecr.io"
+        DOCKER_REGISTRY_SERVER_USERNAME = "bpm2021acr"
+        DOCKER_REGISTRY_SERVER_PASSWORD = "U3S=o=JCtzncrFblrLkpSVtZKW02oVfE"
+    }
+
+    identity {
+        type = "SystemAssigned"
+    }
+}
