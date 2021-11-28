@@ -138,14 +138,14 @@ stages:
         #Deploying to staging slot
         deployToSlotOrASE: true
         slotName: 'staging'
-#    - task: AzureAppServiceManage@0
-#      displayName: 'Swap the staging slot with production (Blue-Green Deployment)'
-#      inputs:
-#        azureSubscription: '${{ variables.subscription }}'
-#        appType: 'webAppContainer'
-#        webAppName: ${{ variables.webAppQAName }}
-#        resourceGroupName: ${{ variables.resourceGroup }}
-#        sourceSlot: 'staging'
-#        swapWithProduction: true
+    - task: AzureAppServiceManage@0
+      displayName: 'Swap the staging slot with production (Blue-Green Deployment)'
+      inputs:
+        azureSubscription: '${{ variables.subscription }}'
+        appType: 'webAppContainer'
+        webAppName: ${{ variables.webAppQAName }}
+        resourceGroupName: ${{ variables.resourceGroup }}
+        sourceSlot: 'staging'
+        swapWithProduction: true
 
 
