@@ -32,8 +32,35 @@ variables:
   value: 'terraformsabibhu2021' 
 - name: terraformStorageRG
   value: 'terraformstoragergp' 
+- name: artifactName
+  value: 'drop' 
 
 stages:
+- stage: Build
+  displayName: "Copy Code"
+  jobs:
+  - job: Copy
+    displayName: 'Copy Code' 
+    steps:
+    - task: CopyFiles@2
+      displayName: 'Copy application code to www folder'
+      inputs:
+        preserveTimestamp: true
+        cleanTargetFolder: true  
+        sourceFolder: '$(System.DefaultWorkingDirectory)'
+        targetFolder: '$(build.artifactstagingdirectory)/www'
+    - task: CopyFiles@2
+      displayName: 'Copy terrraform files to terraform folder'
+      inputs:
+        SourceFolder: terraform
+        TargetFolder: '$(build.artifactstagingdirectory)/terraform'
+    - task: PublishPipelineArtifact@1
+      displayName: 'Publish Artifacts & Binaries to the drop folder'
+      inputs:
+        targetPath: '$(build.artifactstagingdirectory)'
+        artifact: ${{ variables.artifactName }}
+        publishLocation: 'pipeline'
+
 - stage: Infrastructure
   displayName: 'Stage: Destroy Infrastructure'
   jobs:
