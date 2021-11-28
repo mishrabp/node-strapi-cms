@@ -74,6 +74,7 @@ stages:
         repository: ${{ variables.privateRepository }}
         Dockerfile: '$(System.DefaultWorkingDirectory)/**/Dockerfile'
         tags: ${{ variables.tagName }}
+        addPipelineData: false
 
 - stage: Infrastructure
   displayName: 'Stage: Infrastructure'
