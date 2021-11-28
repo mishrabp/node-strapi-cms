@@ -18,7 +18,7 @@ variables:
 - group: PipelineVariableGroup
 #Build & Deployment flags used for debugging & troubleshooting
 - name: bBuildDockerImage
-  value: true 
+  value: false 
 - name: bBuildInfrastructure
   value: false 
 - name: bDeployToDev
@@ -43,7 +43,7 @@ variables:
   value: 'terraformsabibhu2021' 
 - name: terraformStorageRG
   value: 'terraformstoragergp' 
-#Container & K8 Variables
+#Azure Container Registry Variables
 - name: privateContainerRegistry
   value: 'docker-azure-registry-private'
 - name: privateRepository
