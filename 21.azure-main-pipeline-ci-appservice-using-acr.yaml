@@ -34,8 +34,8 @@ variables:
   value: 'West US 2' 
 - name: subscription
   value: 'Visual Studio Enterprise Subscription - 113136' 
-- name: artifactName
-  value: 'drop'
+- name: webAppName
+  value: 'node-strapi-cms-dev'
 #Terraform Storage Variables
 - name: terraformContainer
   value: 'node-strapi-cms-terraform' 
@@ -48,15 +48,15 @@ variables:
   value: 'docker-azure-registry-private'
 - name: privateRepository
   value: 'node-strapi-cms'
-- name: tagName
-  value: 'latest'
+- name: containerName
+  value: 'bpm2021acr.azurecr.io/node-strapi-cms:latest'
 
 stages:
 - stage: Build
-  displayName: "Download Code from GitHub"
+  displayName: "Building Docker Image"
   jobs:
   - job: Dockerize
-    displayName: 'Building Docker Image....'
+    displayName: 'Downloading code....'
     pool:
       name: "MyBuildAgents"
     condition:  eq('${{ variables.bBuildDockerImage }}', true)
@@ -79,7 +79,7 @@ stages:
   displayName: 'Stage: Infrastructure'
   condition: eq('${{ variables.bBuildInfrastructure }}', true) 
   jobs:
-  - template: 12.azure-sub-pipeline-setup-appservice-infrastructure.yaml
+  - template: 22.azure-sub-pipeline-setup-appservice-infrastructure.yaml
     parameters:
       subscription: ${{ variables.subscription }}
       terraformstoragerg: ${{ variables.terraformStorageRG }}
@@ -101,7 +101,7 @@ stages:
         #appType: 'webAppLinux'  #its webApp for windows based apps. webAppLinux for linux based apps
         WebAppName: ${{ variables.webAppName }}
         ResourceGroupName: ${{ variables.webAppRG }}
-        containers: bpm2021acr.azurecr.io/node-strapi-cms:latest
+        containers: ${{ variables.containerName }}
         #Deploying to staging slot
         deployToSlotOrASE: true
         SlotName: 'staging'
