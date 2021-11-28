@@ -97,7 +97,7 @@ stages:
       displayName: 'Publish container to App Service....'
       inputs:
         ConnectionType: 'AzureRM'
-        azureSubscription: ${{ parameters.subscription }}
+        azureSubscription: ${{ variables.subscription }}
         #appType: 'webAppLinux'  #its webApp for windows based apps. webAppLinux for linux based apps
         WebAppName: ${{ variables.webAppName }}
         ResourceGroupName: ${{ variables.webAppRG }}
