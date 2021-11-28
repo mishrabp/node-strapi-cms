@@ -20,8 +20,10 @@ variables:
 - name: bBuildDockerImage
   value: false 
 - name: bBuildInfrastructure
-  value: false 
+  value: true 
 - name: bDeployToDev
+  value: false 
+- name: bDeployToQA
   value: true 
 #Pipeline Variables
 - name: appServicePlan
@@ -36,6 +38,8 @@ variables:
   value: 'Visual Studio Enterprise Subscription - 113136' 
 - name: webAppName
   value: 'node-strapi-cms-dev'
+- name: webAppQAName
+  value: 'node-strapi-cms-qa'
 #Terraform Storage Variables
 - name: terraformContainer
   value: 'node-strapi-cms-terraform' 
@@ -87,8 +91,8 @@ stages:
       terraformstorageaccount: ${{ variables.terraformStorageAccount }}
       terraformcontainer: ${{ variables.terraformContainer }}
 
-- stage: Deploy
-  displayName: 'Stage: Deploy'
+- stage: DeployDev
+  displayName: 'Stage: Deploy Development'
   condition: eq('${{ variables.bDeployToDev }}', true) 
   jobs:
   - job: Deploy
@@ -113,5 +117,22 @@ stages:
 #        resourceGroupName: ${{ variables.resourceGroup }}
 #        sourceSlot: 'staging'
 #        swapWithProduction: true
+- stage: DeployQA
+  displayName: 'Stage: Deploy QA'
+  condition: eq('${{ variables.bDeployToQA }}', true) 
+  jobs:
+  - job: Deploy
+    displayName: 'Deploying Image....'
+    steps:
+    - task: AzureRmWebAppDeployment@4
+      displayName: 'Publish zip to App Service....'
+      inputs:
+        connectionType: 'AzureRM'
+        azureSubscription: ${{ parameters.subscription }}
+        appType: 'webAppContainer'  #its webApp for windows based apps. webAppLinux for linux based apps
+        webAppName: ${{ variables.webAppQAName }}
+        dockerNamespace: 'bpm2021acr.azurecr.io' #variable translates to <_my_container_registry_.azurecr.io>
+        dockerRepository: 'node-strapi-cms' #variable for the **Image** I set in the App Service
+        dockerImageTag: 'latest' 
 
 
