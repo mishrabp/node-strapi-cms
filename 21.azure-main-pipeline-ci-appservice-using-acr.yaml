@@ -99,7 +99,7 @@ stages:
         ConnectionType: 'AzureRM'
         azureSubscription: ${{ variables.subscription }}
         #appType: 'webAppLinux'  #its webApp for windows based apps. webAppLinux for linux based apps
-        WebAppName: ${{ variables.webAppName }}
+        appName: ${{ variables.webAppName }}
         ResourceGroupName: ${{ variables.webAppRG }}
         containers: ${{ variables.containerName }}
         #Deploying to staging slot
