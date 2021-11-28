@@ -20,9 +20,9 @@ variables:
 - name: bBuildDockerImage
   value: true 
 - name: bBuildInfrastructure
-  value: true 
+  value: false 
 - name: bDeployToDev
-  value: true 
+  value: false 
 #Pipeline Variables
 - name: appServicePlan
   value: 'node-strapi-cms-sp' 
@@ -43,10 +43,16 @@ variables:
   value: 'terraformsabibhu2021' 
 - name: terraformStorageRG
   value: 'terraformstoragergp' 
-
+#Container & K8 Variables
+- name: privateContainerRegistry
+  value: 'docker-azure-registry-private'
+- name: privateRepository
+  value: 'node-strapi-cms'
+- name: tagName
+  value: 'latest'
 
 stages:
-- stage: Download
+- stage: Build
   displayName: "Download Code from GitHub"
   jobs:
   - job: Dockerize
