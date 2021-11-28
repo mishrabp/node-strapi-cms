@@ -100,7 +100,7 @@ stages:
         azureSubscription: ${{ variables.subscription }}
         #appType: 'webAppLinux'  #its webApp for windows based apps. webAppLinux for linux based apps
         appName: ${{ variables.webAppName }}
-        ResourceGroupName: ${{ variables.webAppRG }}
+        ResourceGroupName: ${{ variables.resourceGroup }}
         containers: ${{ variables.containerName }}
         #Deploying to staging slot
         deployToSlotOrASE: true
@@ -110,7 +110,7 @@ stages:
       inputs:
         azureSubscription: '${{ variables.subscription }}'
         webAppName: ${{ variables.webAppName }}
-        resourceGroupName: ${{ variables.webAppRG }}
+        resourceGroupName: ${{ variables.resourceGroup }}
         sourceSlot: 'staging'
         swapWithProduction: true
 
