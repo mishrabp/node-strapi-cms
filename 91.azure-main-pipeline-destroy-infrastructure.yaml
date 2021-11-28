@@ -37,7 +37,7 @@ variables:
 
 stages:
 - stage: Build
-  displayName: "Copy Code"
+  displayName: "Stage: Download Code"
   jobs:
   - job: Copy
     displayName: 'Copy Code' 
