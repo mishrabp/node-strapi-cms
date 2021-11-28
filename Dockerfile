@@ -5,12 +5,12 @@ RUN apt-get update -y && \
     apt-get install curl -y && \
     curl -sL https://deb.nodesource.com/setup_12.x && \
     apt-get install nodejs -y && \
-    apt-get install npm -y && \
+    apt-get install npm -y 
 # create folder <app> inside the container image
-    mkdir -p /app 
+#    mkdir -p /app 
 
 # Set working directory within the image. Paths will be relative this WORKDIR. 
-WORKDIR /app
+#WORKDIR /app
 
 # copy source files from host computer to container
 COPY ["package.json", "package-lock.json*", "./"]
