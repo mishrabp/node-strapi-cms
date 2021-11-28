@@ -18,9 +18,9 @@ variables:
 - group: PipelineVariableGroup
 #Build & Deployment flags used for debugging & troubleshooting
 - name: bBuildDockerImage
-  value: false 
+  value: true 
 - name: bBuildInfrastructure
-  value: false 
+  value: true 
 - name: bDeployToDev
   value: false 
 - name: bDeployToQA
