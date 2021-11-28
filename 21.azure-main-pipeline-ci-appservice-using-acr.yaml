@@ -100,7 +100,7 @@ stages:
         #appType: 'webAppLinux'  #its webApp for windows based apps. webAppLinux for linux based apps
         appName: ${{ variables.webAppName }}
         resourceGroupName: ${{ variables.resourceGroup }}
-        containers: ${{ variables.containerName }}
+        imageName: ${{ variables.containerName }}
         #Deploying to staging slot
         deployToSlotOrASE: true
         slotName: 'staging'
