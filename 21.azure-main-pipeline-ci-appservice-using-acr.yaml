@@ -96,15 +96,15 @@ stages:
     - task: AzureWebAppContainer@1
       displayName: 'Publish container to App Service....'
       inputs:
-        ConnectionType: 'AzureRM'
         azureSubscription: ${{ variables.subscription }}
         #appType: 'webAppLinux'  #its webApp for windows based apps. webAppLinux for linux based apps
         appName: ${{ variables.webAppName }}
-        ResourceGroupName: ${{ variables.resourceGroup }}
+        resourceGroupName: ${{ variables.resourceGroup }}
         containers: ${{ variables.containerName }}
         #Deploying to staging slot
         deployToSlotOrASE: true
-        SlotName: 'staging'
+        slotName: 'staging'
+        containerCommand: 'npm start'
     - task: AzureAppServiceManage@0
       displayName: 'Swap the staging slot with production (Blue-Green Deployment)'
       inputs:
