@@ -125,7 +125,7 @@ stages:
     displayName: 'Deploying Image....'
     steps:
     - task: AzureRmWebAppDeployment@4
-      displayName: 'Publish zip to App Service....'
+      displayName: 'Publish container to App Service....'
       inputs:
         connectionType: 'AzureRM'
         azureSubscription: ${{ variables.subscription }}
@@ -134,5 +134,17 @@ stages:
         dockerNamespace: 'bpm2021acr.azurecr.io' #variable translates to <_my_container_registry_.azurecr.io>
         dockerRepository: 'node-strapi-cms' #variable for the **Image** I set in the App Service
         dockerImageTag: 'latest' 
+        #Deploying to staging slot
+        deployToSlotOrASE: true
+        slotName: 'staging'
+    - task: AzureAppServiceManage@0
+      displayName: 'Swap the staging slot with production (Blue-Green Deployment)'
+      inputs:
+        azureSubscription: '${{ variables.subscription }}'
+        appType: 'webAppContainer'
+        webAppName: ${{ variables.webAppQAName }}
+        resourceGroupName: ${{ variables.webAppRG }}
+        sourceSlot: 'staging'
+        swapWithProduction: true
 
 

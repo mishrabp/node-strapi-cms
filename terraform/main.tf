@@ -145,3 +145,39 @@ resource "azurerm_app_service" "main-qa" {
         type = "SystemAssigned"
     }
 }
+
+#Creating an App Service Slot for QA
+resource "azurerm_app_service_slot" "main-qa" {
+    name = "staging"
+    app_service_name = azurerm_app_service.main-qa.name 
+    location = azurerm_resource_group.main.location
+    resource_group_name = azurerm_resource_group.main.name
+    app_service_plan_id = azurerm_app_service_plan.main.id 
+
+        site_config {
+        linux_fx_version = "DOCKER|bpm2021acr.azurecr.io/node-strapi-cms:latest"
+        always_on        = "true"
+    }
+    
+    app_settings = {
+        "DATABASE_HOST" = "devopsmasterlinuxvm.centralus.cloudapp.azure.com"
+        "DATABASE_SRV" = "false"
+        "DATABASE_PORT" = "9003"
+        "DATABASE_NAME" = "strapicms"
+        "DATABASE_USERNAME" = "mongoadmin"
+        "DATABASE_PASSWORD" = "passw0rd!"
+        "AUTHENTICATION_DATABASE" = ""
+        "DATABASE_SSL" = "false"
+        "NODE_ENV" = "development"
+
+        WEBSITES_ENABLE_APP_SERVICE_STORAGE = false
+        # Settings for private Container Registires  
+        DOCKER_REGISTRY_SERVER_URL      = "https://bpm2021acr.azurecr.io"
+        DOCKER_REGISTRY_SERVER_USERNAME = "bpm2021acr"
+        DOCKER_REGISTRY_SERVER_PASSWORD = "U3S=o=JCtzncrFblrLkpSVtZKW02oVfE"
+    }
+
+    identity {
+        type = "SystemAssigned"
+    }
+}
