@@ -128,7 +128,7 @@ stages:
       displayName: 'Publish zip to App Service....'
       inputs:
         connectionType: 'AzureRM'
-        azureSubscription: ${{ parameters.subscription }}
+        azureSubscription: ${{ variables.subscription }}
         appType: 'webAppContainer'  #its webApp for windows based apps. webAppLinux for linux based apps
         webAppName: ${{ variables.webAppQAName }}
         dockerNamespace: 'bpm2021acr.azurecr.io' #variable translates to <_my_container_registry_.azurecr.io>
