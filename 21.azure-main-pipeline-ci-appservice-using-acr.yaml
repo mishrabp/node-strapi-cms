@@ -109,10 +109,9 @@ stages:
       displayName: 'Swap the staging slot with production (Blue-Green Deployment)'
       inputs:
         azureSubscription: '${{ variables.subscription }}'
-        #appType: webAppLinux
-        WebAppName: ${{ variables.webAppName }}
-        ResourceGroupName: ${{ variables.webAppRG }}
-        SourceSlot: 'staging'
-        SwapWithProduction: true
+        webAppName: ${{ variables.webAppName }}
+        resourceGroupName: ${{ variables.webAppRG }}
+        sourceSlot: 'staging'
+        swapWithProduction: true
 
 
