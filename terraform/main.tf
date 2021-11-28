@@ -114,8 +114,8 @@ resource "azurerm_app_service" "main" {
 #Creating an App Service for QA
 resource "azurerm_app_service" "main-qa" {
     name = "${var.app_service_name_prefix}-qa"
-    location = azurerm_resource_group.main-qa.location
-    resource_group_name = azurerm_resource_group.main-qa.name
+    location = azurerm_resource_group.main.location
+    resource_group_name = azurerm_resource_group.main.name
     app_service_plan_id = azurerm_app_service_plan.main-qa.id 
 
     site_config {

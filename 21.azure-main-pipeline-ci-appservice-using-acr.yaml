@@ -57,7 +57,7 @@ variables:
 
 stages:
 - stage: Build
-  displayName: "Building Docker Image"
+  displayName: 'Stage: Build Image'
   jobs:
   - job: Dockerize
     displayName: 'Downloading code....'
@@ -81,7 +81,7 @@ stages:
         addPipelineData: false
 
 - stage: Infrastructure
-  displayName: 'Stage: Infrastructure'
+  displayName: 'Stage: Build Infrastructure'
   condition: eq('${{ variables.bBuildInfrastructure }}', true) 
   jobs:
   - template: 22.azure-sub-pipeline-setup-appservice-infrastructure.yaml
