@@ -129,6 +129,7 @@ stages:
       inputs:
         connectionType: 'AzureRM'
         azureSubscription: ${{ variables.subscription }}
+        resourceGroupName: ${{ variables.resourceGroup }}
         appType: 'webAppContainer'  #its webApp for windows based apps. webAppLinux for linux based apps
         webAppName: ${{ variables.webAppQAName }}
         dockerNamespace: 'bpm2021acr.azurecr.io' #variable translates to <_my_container_registry_.azurecr.io>
