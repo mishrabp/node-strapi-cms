@@ -20,7 +20,7 @@ variables:
 - name: bBuildDockerImage
   value: false 
 - name: bBuildInfrastructure
-  value: true 
+  value: false 
 - name: bDeployToDev
   value: false 
 - name: bDeployToQA
@@ -143,7 +143,7 @@ stages:
         azureSubscription: '${{ variables.subscription }}'
         appType: 'webAppContainer'
         webAppName: ${{ variables.webAppQAName }}
-        resourceGroupName: ${{ variables.webAppRG }}
+        resourceGroupName: ${{ variables.resourceGroup }}
         sourceSlot: 'staging'
         swapWithProduction: true
 
