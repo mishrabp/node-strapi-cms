@@ -22,7 +22,7 @@ variables:
 - name: bBuildInfrastructure
   value: false 
 - name: bDeployToDev
-  value: false 
+  value: true 
 #Pipeline Variables
 - name: appServicePlan
   value: 'node-strapi-cms-sp' 
