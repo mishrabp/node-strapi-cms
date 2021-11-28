@@ -116,7 +116,7 @@ resource "azurerm_app_service" "main-qa" {
     name = "${var.app_service_name_prefix}-qa"
     location = azurerm_resource_group.main.location
     resource_group_name = azurerm_resource_group.main.name
-    app_service_plan_id = azurerm_app_service_plan.main-qa.id 
+    app_service_plan_id = azurerm_app_service_plan.main.id 
 
     site_config {
         linux_fx_version = "DOCKER|bpm2021acr.azurecr.io/node-strapi-cms:latest"
