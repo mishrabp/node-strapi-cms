@@ -99,8 +99,8 @@ stages:
         ConnectionType: 'AzureRM'
         azureSubscription: ${{ parameters.subscription }}
         #appType: 'webAppLinux'  #its webApp for windows based apps. webAppLinux for linux based apps
-        WebAppName: ${{ parameters.webAppName }}
-        ResourceGroupName: ${{ parameters.webAppRG }}
+        WebAppName: ${{ variables.webAppName }}
+        ResourceGroupName: ${{ variables.webAppRG }}
         containers: bpm2021acr.azurecr.io/node-strapi-cms:latest
         #Deploying to staging slot
         deployToSlotOrASE: true
@@ -108,10 +108,10 @@ stages:
     - task: AzureAppServiceManage@0
       displayName: 'Swap the staging slot with production (Blue-Green Deployment)'
       inputs:
-        azureSubscription: '${{ parameters.subscription }}'
+        azureSubscription: '${{ variables.subscription }}'
         #appType: webAppLinux
-        WebAppName: ${{ parameters.webAppName }}
-        ResourceGroupName: ${{ parameters.webAppRG }}
+        WebAppName: ${{ variables.webAppName }}
+        ResourceGroupName: ${{ variables.webAppRG }}
         SourceSlot: 'staging'
         SwapWithProduction: true
 
