@@ -23,6 +23,7 @@ pool:
   demand: node.js
 
 variables:
+- group: PipelineVariableGroup
 #Terraform Storage Variables
 - name: subscription
   value: 'Visual Studio Enterprise Subscription - 113136' 
