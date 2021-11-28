@@ -1,0 +1,21 @@
+{
+  "kind": "collectionType",
+  "collectionName": "testingtypes",
+  "info": {
+    "name": "testingtype"
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "Name": {
+      "type": "string"
+    },
+    "hash": {
+      "type": "integer"
+    }
+  }
+}
