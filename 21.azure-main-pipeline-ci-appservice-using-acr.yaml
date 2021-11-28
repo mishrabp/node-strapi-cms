@@ -49,7 +49,7 @@ variables:
 - name: privateRepository
   value: 'node-strapi-cms'
 - name: containerName
-  value: 'bpm2021acr.azurecr.io/node-strapi-cms:latest'
+  value: 'bpm2021acr.azurecr.io/node-northwind-app:latest'
 
 stages:
 - stage: Build
