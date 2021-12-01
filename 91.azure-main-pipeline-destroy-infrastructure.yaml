@@ -61,7 +61,7 @@ stages:
         targetPath: '$(build.artifactstagingdirectory)'
         artifact: ${{ variables.artifactName }}
         publishLocation: 'pipeline'
-
+ 
 - stage: Infrastructure
   displayName: 'Stage: Destroy Infrastructure'
   jobs:
