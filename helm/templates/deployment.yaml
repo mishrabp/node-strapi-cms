@@ -38,7 +38,7 @@ metadata:
     developer: "Bibhu Prasad Mishra"  
     email: "bibhup_mishra@yahoo.com"  
 spec:
-  replicas: 1
+  replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
       app: strapi-api-pod
@@ -51,7 +51,8 @@ spec:
     spec:
       containers:
       - name: strapi-api-pod
-        image: bibhupmishra/node-strapi-cms-api
+        image: "{{ .Values.image.repository }}/{{ .Values.application.name }}:{{.Values.image.tag |  default .Chart.AppVersion}}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
         envFrom:
         - configMapRef:
             name: strapi-api-configmap

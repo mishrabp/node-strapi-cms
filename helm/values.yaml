@@ -4,8 +4,15 @@
 
 replicaCount: 1
 
+application:
+  author: "Bibhu Prasad Mishra" 
+  email: "bibhup_mishra@yahoo.com" 
+  name: node-strapi-cms-api 
+  type: api
+  namespace: ns2022
+
 image:
-  repository: nginx
+  repository: bibhupmishra
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
