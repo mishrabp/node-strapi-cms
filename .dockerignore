@@ -1,0 +1,9 @@
+*.sh
+*.cmd
+*.yaml
+/node_modules/
+/helm/
+/terraform/
+/public/
+.git
+.gitignore
