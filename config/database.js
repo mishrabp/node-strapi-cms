@@ -6,9 +6,9 @@ module.exports = ({ env }) => ({
       settings: {
         host: env('DATABASE_HOST', 'devopsmasterlinuxvm.centralus.cloudapp.azure.com'),
         srv: env.bool('DATABASE_SRV', false),
-        port: env.int('DATABASE_PORT', 9003),
+        port: env.int('DATABASE_PORT', 30017),
         database: env('DATABASE_NAME', 'strapicms'),
-        username: env('DATABASE_USERNAME', 'mongoadmin'),
+        username: env('DATABASE_USERNAME', 'strapiuser'),
         password: env('DATABASE_PASSWORD', 'passw0rd!'),
       },
       options: {
