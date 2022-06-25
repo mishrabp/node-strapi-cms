@@ -6,9 +6,9 @@ metadata:
 data:
   DATABASE_SRV: "false" 
   DATABASE_PORT: "30017"
-  DATABASE_HOST: devopsk8masterlinuxvm.centralus.cloudapp.azure.com
+#  DATABASE_HOST: devopsk811masterlinuxvm.centralus.cloudapp.azure.com
 #  DATABASE_PORT: "27017" 
-#  DATABASE_HOST: mongodb-0.mongodb-headless-svc.apps.svc.cluster.local
+  DATABASE_HOST: mongodb-0.mongodb-headless-svc.apps.svc.cluster.local
   AUTHENTICATION_DATABASE: "strapicms" 
   DATABASE_SSL: "false"
 
